@@ -51,6 +51,7 @@ maxyx = screen.getmaxyx()
 curses.curs_set(0)
 screen.keypad(1)
 
+
 snake = [[maxyx[0]//2, maxyx[1]//2]]
 
 a = random.randint(1, maxyx[0])
@@ -95,11 +96,16 @@ while not over:
         snake = growSnake(snake, direction)
     time.sleep(0.1)
 
-    if snake[0][0] == maxyx[0] or snake[0][1] == maxyx[1] or snake[0][0] == 0 or snake[0][1] == 0:
+    if snake[0] in snake[1:]:
         over = True
+
+    elif snake[0][0] == maxyx[0] or snake[0][1] == maxyx[1] or snake[0][0] == 0 or snake[0][1] == 0:
+        over = True
+
 
 screen.nodelay(0)
 curses.curs_set(1)
+
 
 string = 'Game Over (press any key to quit!)'
 screen.addstr(maxyx[0]//2, maxyx[1]//2-len(string)//2, string)
