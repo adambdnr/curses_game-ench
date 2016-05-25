@@ -12,8 +12,7 @@ def main(stdscr):
 
 def drawSnake(screen, snake):
     for pos in snake:
-        screen.addch(pos[0], pos[1], '#')
-
+        screen.addch(pos[0], pos[1], '¤', curses.color_pair(1))
 
 def growSnake(snake, direction):
     tail = snake[len(snake)-1][:]
@@ -72,6 +71,7 @@ curses.noecho()
 maxyx = screen.getmaxyx()
 curses.curs_set(0)
 screen.keypad(1)
+curses.start_color()
 
 
 snake = [[maxyx[0]//2, maxyx[1]//2]]
@@ -86,9 +86,9 @@ screen.nodelay(1)
 menu(screen, maxyx)
 while not over:
     screen.clear()
-    screen.addch(a, b, '&')
+    screen.border()
+    screen.addch(a, b, '*')
     drawSnake(screen, snake)
-    screen.refresh()
     action = screen.getch()
 
     if action == curses.KEY_UP and direction != 1:
@@ -106,12 +106,21 @@ while not over:
     else:
         snake = moveSnake(snake, direction)
 
+    if curses.has_colors():
+        curses.start_color()
+
+    curses.init_pair(1, curses.COLOR_YELLOW, curses.COLOR_GREEN)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLACK)
+
     if (a == snake[0][0]) and (b == snake[0][1]):
 
-        a = random.randint(1, maxyx[0]-1)
-        b = random.randint(1, maxyx[1]-1)
+        a = random.randint(1, maxyx[0]-1) - 1
+        b = random.randint(1, maxyx[1]-1) - 1
 
-        screen.addch(a, b, '&')
+        screen.addch(a, b, '*')
         screen.refresh()
 
         snake = growSnake(snake, direction)
@@ -120,7 +129,7 @@ while not over:
     if snake[0] in snake[1:]:
         over = True
 
-    elif snake[0][0] == maxyx[0] or snake[0][1] == maxyx[1] or snake[0][0] == 0 or snake[0][1] == 0:
+    elif snake[0][0] == maxyx[0] - 1 or snake[0][1] == maxyx[1] - 1 or snake[0][0] == 0 - 1 or snake[0][1] == 0 - 1:
         over = True
 
 
@@ -129,8 +138,8 @@ curses.curs_set(0)
 
 screen.clear()
 screen.refresh
-string = 'Game Over (press any key to quit!)'
-screen.addstr(maxyx[0]//2, maxyx[1]//2-len(string)//2, string, curses.A_BLINK + curses.A_BOLD)
+message = "Game Over (press any key to quit!)"
+screen.addstr(maxyx[0]//2, maxyx[1]//2-len(message)//2, message, curses.A_BLINK + curses.A_BOLD)
 screen.getch()
 
 curses.endwin()
