@@ -45,6 +45,28 @@ def moveSnake(snake, direction):
     return snake
 
 
+def menu(scr, maxyx):
+    scr.clear()
+    info1 = 'WELCOME TO OUR VERY OWN SNAKE GAME\n'
+    info2 = 'You task is to collect te items apperaring on the screen'
+    info3 = 'You can control the snake with the arrow keys'
+    info4 = "PRESS 'S' TO START"
+    info5 = "PRESS 'Q' TO QUIT TO THE TERMINAL"
+    scr.addstr(maxyx[0]//2-4, maxyx[1]//2-len(info1)//2, info1, curses.A_BOLD + curses.A_BLINK)
+    scr.addstr(maxyx[0]//2-2, maxyx[1]//2-len(info2)//2, info2)
+    scr.addstr(maxyx[0]//2-1, maxyx[1]//2-len(info3)//2, info3)
+    scr.addstr(maxyx[0]//2, maxyx[1]//2-len(info4)//2, info4)
+    scr.addstr(maxyx[0]//2+1, maxyx[1]//2-len(info5)//2, info5)
+    key = scr.getch()
+    while True:
+        key = scr.getch()
+        if key == ord('s'):
+            return True
+        if key == ord('q'):
+            scr.clear()
+            scr.refresh()
+            quit()
+
 screen = curses.initscr()
 curses.noecho()
 maxyx = screen.getmaxyx()
@@ -61,10 +83,9 @@ b = random.randint(1, maxyx[1])
 over = False
 direction = 0
 screen.nodelay(1)
-
+menu(screen, maxyx)
 while not over:
     screen.clear()
-
     screen.addch(a, b, '&')
     drawSnake(screen, snake)
     screen.refresh()
@@ -104,11 +125,12 @@ while not over:
 
 
 screen.nodelay(0)
-curses.curs_set(1)
+curses.curs_set(0)
 
-
+screen.clear()
+screen.refresh
 string = 'Game Over (press any key to quit!)'
-screen.addstr(maxyx[0]//2, maxyx[1]//2-len(string)//2, string)
+screen.addstr(maxyx[0]//2, maxyx[1]//2-len(string)//2, string, curses.A_BLINK + curses.A_BOLD)
 screen.getch()
 
 curses.endwin()
