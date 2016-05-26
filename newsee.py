@@ -14,6 +14,7 @@ def drawSnake(screen, snake):
     for pos in snake:
         screen.addch(pos[0], pos[1], '¤', curses.color_pair(1))
 
+
 def growSnake(snake, direction):
     tail = snake[len(snake)-1][:]
     if direction == 0:
@@ -137,7 +138,7 @@ curses.curs_set(0)
 screen.clear()
 screen.refresh
 
-message = ("Game Over (press any key to quit!). You have " +str(score)+ " points")
+message = ("Game Over (press any key to quit!). You have " + str(score) + " points")
 screen.addstr(maxyx[0]//2, maxyx[1]//2-len(message)//2, message, curses.A_BLINK + curses.A_BOLD)
 screen.getch()
 
