@@ -84,6 +84,7 @@ over = False
 direction = 0
 screen.nodelay(1)
 menu(screen, maxyx)
+score = 0
 while not over:
     screen.clear()
     screen.border()
@@ -110,26 +111,23 @@ while not over:
         curses.start_color()
 
     curses.init_pair(1, curses.COLOR_YELLOW, curses.COLOR_GREEN)
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
     if (a == snake[0][0]) and (b == snake[0][1]):
 
-        a = random.randint(1, maxyx[0]-1) - 1
-        b = random.randint(1, maxyx[1]-1) - 1
+        a = random.randint(2, maxyx[0]-2)
+        b = random.randint(2, maxyx[1]-2)
 
         screen.addch(a, b, '*')
         screen.refresh()
 
         snake = growSnake(snake, direction)
+        score += 1
     time.sleep(0.1)
 
     if snake[0] in snake[1:]:
         over = True
 
-    elif snake[0][0] == maxyx[0] - 1 or snake[0][1] == maxyx[1] - 1 or snake[0][0] == 0 - 1 or snake[0][1] == 0 - 1:
+    elif snake[0][0] == maxyx[0] - 1 or snake[0][1] == maxyx[1] - 1 or snake[0][0] == 0 or snake[0][1] == 0:
         over = True
 
 
@@ -138,7 +136,8 @@ curses.curs_set(0)
 
 screen.clear()
 screen.refresh
-message = "Game Over (press any key to quit!)"
+
+message = ("Game Over (press any key to quit!). You have " +str(score)+ " points")
 screen.addstr(maxyx[0]//2, maxyx[1]//2-len(message)//2, message, curses.A_BLINK + curses.A_BOLD)
 screen.getch()
 
